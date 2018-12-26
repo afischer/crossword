@@ -8,8 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ViewController : NSViewController
-
-
+@interface ViewController : NSViewController <NSTableViewDelegate>
+@property (weak) IBOutlet NSTableView *acrossList;
+@property (weak) IBOutlet NSTableView *downList;
+@property (weak) IBOutlet NSTextField *titleText;
+@property (weak) IBOutlet NSTextField *authorText;
+@property (weak) IBOutlet NSTextField *copyrightText;
+@property (weak) IBOutlet NSView *gameView;
 @end
 

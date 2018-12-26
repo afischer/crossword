@@ -15,6 +15,7 @@
 		2E00057521D30526006F12E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00057421D30526006F12E8 /* main.m */; };
 		2E00058021D30526006F12E8 /* CrosswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00057F21D30526006F12E8 /* CrosswordTests.m */; };
 		2E00058B21D30526006F12E8 /* CrosswordUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00058A21D30526006F12E8 /* CrosswordUITests.m */; };
+		2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00059921D3EA1F006F12E8 /* Crossword.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		2E00058621D30526006F12E8 /* CrosswordUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrosswordUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E00058A21D30526006F12E8 /* CrosswordUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CrosswordUITests.m; sourceTree = "<group>"; };
 		2E00058C21D30526006F12E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2E00059821D3EA1F006F12E8 /* Crossword.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Crossword.h; sourceTree = "<group>"; };
+		2E00059921D3EA1F006F12E8 /* Crossword.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Crossword.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +117,8 @@
 				2E00057321D30526006F12E8 /* Info.plist */,
 				2E00057421D30526006F12E8 /* main.m */,
 				2E00057621D30526006F12E8 /* Crossword.entitlements */,
+				2E00059821D3EA1F006F12E8 /* Crossword.h */,
+				2E00059921D3EA1F006F12E8 /* Crossword.m */,
 			);
 			path = Crossword;
 			sourceTree = "<group>";
@@ -268,6 +273,7 @@
 				2E00056D21D30525006F12E8 /* Document.m in Sources */,
 				2E00056A21D30525006F12E8 /* ViewController.m in Sources */,
 				2E00057521D30526006F12E8 /* main.m in Sources */,
+				2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */,
 				2E00056721D30525006F12E8 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

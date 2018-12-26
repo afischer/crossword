@@ -7,9 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Crossword.h"
 
 @interface Document : NSDocument
-
-
+@property (strong, nonatomic) Crossword *crossword;
+@property (nonatomic) NSString *formatVersion;
+@property (nonatomic) NSString *checksum; // TODO
 @end
 

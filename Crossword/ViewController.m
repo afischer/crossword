@@ -7,7 +7,8 @@
 //
 
 #import "ViewController.h"
-
+#import "Document.h"
+#import "Crossword.h"
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -16,6 +17,16 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidAppear {
+    Document *puzzleDoc = self.view.window.windowController.document;
+    Crossword *cw = puzzleDoc.crossword;
+    [self.titleText setStringValue:cw.name];
+    [self.authorText setStringValue:cw.author];
+    [self.copyrightText setStringValue:cw.copyright];
+    
+    [self.acrossList beginUpdates];
+    [self.acrossList endUpdates];
+}
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
