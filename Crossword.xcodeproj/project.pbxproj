@@ -16,6 +16,7 @@
 		2E00058021D30526006F12E8 /* CrosswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00057F21D30526006F12E8 /* CrosswordTests.m */; };
 		2E00058B21D30526006F12E8 /* CrosswordUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00058A21D30526006F12E8 /* CrosswordUITests.m */; };
 		2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00059921D3EA1F006F12E8 /* Crossword.m */; };
+		2E32AE9F21E1367800090646 /* GameGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AE9E21E1367800090646 /* GameGrid.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,8 @@
 		2E00058C21D30526006F12E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E00059821D3EA1F006F12E8 /* Crossword.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Crossword.h; sourceTree = "<group>"; };
 		2E00059921D3EA1F006F12E8 /* Crossword.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Crossword.m; sourceTree = "<group>"; };
+		2E32AE9D21E1367800090646 /* GameGrid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameGrid.h; sourceTree = "<group>"; };
+		2E32AE9E21E1367800090646 /* GameGrid.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameGrid.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,8 @@
 				2E00056621D30525006F12E8 /* AppDelegate.m */,
 				2E00056821D30525006F12E8 /* ViewController.h */,
 				2E00056921D30525006F12E8 /* ViewController.m */,
+				2E32AE9D21E1367800090646 /* GameGrid.h */,
+				2E32AE9E21E1367800090646 /* GameGrid.m */,
 				2E00056B21D30525006F12E8 /* Document.h */,
 				2E00056C21D30525006F12E8 /* Document.m */,
 				2E00056E21D30526006F12E8 /* Assets.xcassets */,
@@ -275,6 +280,7 @@
 				2E00057521D30526006F12E8 /* main.m in Sources */,
 				2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */,
 				2E00056721D30525006F12E8 /* AppDelegate.m in Sources */,
+				2E32AE9F21E1367800090646 /* GameGrid.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

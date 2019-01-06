@@ -20,10 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int height;
 @property (nonatomic) int width;
 @property (nonatomic) int numClues;
-@property (nonatomic) NSArray *acrossClues;
-@property (nonatomic) NSArray *downClues;
-
+@property (nonatomic) NSDictionary *acrossClues;
+@property (nonatomic) NSDictionary *downClues;
+@property (nonatomic) NSArray *boardLayout;
 - (instancetype)initWithData:(NSData *)data;
+
+- (BOOL) isBlackAtX:(int) x Y:(int) y;
+- (BOOL) hasAcrossAtX:(int) x Y:(int) y;
+- (BOOL) hasDownAtX:(int) x Y:(int) y;
 @end
 
 NS_ASSUME_NONNULL_END

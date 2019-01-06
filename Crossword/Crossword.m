@@ -10,6 +10,7 @@
 
 @implementation Crossword
 
+
 - (NSString *) cleanStringWithData:(NSData *)data {
     NSString *s = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
     return [s stringByReplacingOccurrencesOfString:@"\0" withString:@""];
@@ -41,6 +42,15 @@
         NSString *boardString = [[NSString alloc] initWithData:boardState encoding:NSISOLatin1StringEncoding];
         
 
+        NSMutableArray *board = [[NSMutableArray alloc] init];
+        for (int i = 0; i < self.width; i++) {
+            NSRange rowRange = NSMakeRange(self.width * i, self.width);
+            [board addObject:[boardString substringWithRange:rowRange]];
+        }
+        self.boardLayout = [board copy];
+        
+        NSLog(@"%@", board);
+        
         // GET CLUES
         NSMutableArray *clues = [[NSMutableArray alloc] init];
         int offset = 0;
@@ -50,28 +60,86 @@
             clueLen += 1;
             int clueOffset = HEADER_LENGTH + boardSize * 2 + i;
             // if we hit a null byte, add word and reset params
+            
             if (puzBytes[clueOffset] == 0x00) {
                 NSData *clueData = [data subdataWithRange:NSMakeRange(HEADER_LENGTH + boardSize * 2 + offset, clueLen)];
                 
                 NSString *clue = [self cleanStringWithData:clueData];
-                
-                if (!clue) {
+                [clues addObject:clue];
+
+                if (puzBytes[clueOffset + 1] == 0x00) {
                     break;
                 }
-                [clues addObject:clue];
                 offset = i;
                 clueLen = 0;
             }
         }
         
-        self.acrossClues = clues;
+        // remove title, author, and copyright
+        
         
         self.name = clues[0];
         self.author = clues[1];
         self.copyright = clues[2];
         
-        NSLog(@"%@", [clues subarrayWithRange:NSMakeRange(0, 3)]);
+        // FIXME
+        clues = [[clues subarrayWithRange:NSMakeRange(3, clues.count - 3)] mutableCopy];
+
+        
+        // MAP CLUES
+        int clueNum = 1; // current clue's box number
+        int clueIdx = 0; // current clue's index in clue listing
+        NSMutableDictionary *acrossClueMap = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *downClueMap = [[NSMutableDictionary alloc] init];
+        
+        for (int y = 0; y < self.height; y++) {
+            for (int x = 0; x < self.width; x++) {
+                if ([self isBlackAtX:x Y:y]) continue;
+                BOOL assigned = NO; // have we given a number in this iteration?
+                NSString *numString = [NSString stringWithFormat:@"%d", clueNum];
+                // across check
+                if ([self hasAcrossAtX:x Y:y]) {
+//                    NSLog(@"Found across");
+                    [acrossClueMap setValue:clues[clueIdx] forKey:numString];
+                    assigned = YES;
+                    clueIdx++;
+                }
+                // down check
+                if ([self hasDownAtX:x Y:y]) {
+//                    NSLog(@"Found down");
+                    [downClueMap setValue:clues[clueIdx] forKey:numString];
+                    assigned = YES;
+                    clueIdx++;
+                }
+                
+                if (assigned) clueNum++; // assigned clue values, so inc counter
+            }
+        }
+        
+        self.acrossClues = acrossClueMap;
+        self.downClues = downClueMap;
+
+        NSLog(@"%@", acrossClueMap);
+        NSLog(@"%@", downClueMap);
     }
     return self;
+}
+
+- (BOOL) isBlackAtX:(int) x Y:(int) y {
+    return [self.boardLayout[y] characterAtIndex:x] == 46;
+}
+
+- (BOOL) hasAcrossAtX:(int) x Y:(int) y {
+    if (x == 0 || [self isBlackAtX:x - 1 Y:y]) {
+        return x + 1 < self.width && ![self isBlackAtX:x + 1 Y:y];
+    }
+    return NO;
+}
+
+- (BOOL) hasDownAtX:(int) x Y:(int) y {
+    if (y== 0 || [self isBlackAtX:x Y:y - 1]) {
+        return y + 1 < self.height && ![self isBlackAtX:x Y:y + 1];
+    }
+    return NO;
 }
 @end

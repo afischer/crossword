@@ -7,13 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Crossword.h"
+#import "GameGrid.h"
 
-@interface ViewController : NSViewController <NSTableViewDelegate>
+@interface ViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
 @property (weak) IBOutlet NSTableView *acrossList;
 @property (weak) IBOutlet NSTableView *downList;
 @property (weak) IBOutlet NSTextField *titleText;
 @property (weak) IBOutlet NSTextField *authorText;
 @property (weak) IBOutlet NSTextField *copyrightText;
-@property (weak) IBOutlet NSView *gameView;
+@property (weak) IBOutlet GameGrid *gameTable;
+@property (strong, nonatomic) Crossword *crossword;
+@property (strong, nonatomic) NSArray* acrossKeys;
+@property (strong, nonatomic) NSArray* downKeys;
 @end
 
