@@ -91,16 +91,20 @@
         int clueIdx = 0; // current clue's index in clue listing
         NSMutableDictionary *acrossClueMap = [[NSMutableDictionary alloc] init];
         NSMutableDictionary *downClueMap = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *labelMap = [[NSMutableDictionary alloc] init];
+
         
         for (int y = 0; y < self.height; y++) {
             for (int x = 0; x < self.width; x++) {
                 if ([self isBlackAtX:x Y:y]) continue;
                 BOOL assigned = NO; // have we given a number in this iteration?
                 NSString *numString = [NSString stringWithFormat:@"%d", clueNum];
+                NSString *coordString = [NSString stringWithFormat:@"%d,%d", x, y];
                 // across check
                 if ([self hasAcrossAtX:x Y:y]) {
 //                    NSLog(@"Found across");
                     [acrossClueMap setValue:clues[clueIdx] forKey:numString];
+                    [labelMap setValue:numString forKey:coordString];
                     assigned = YES;
                     clueIdx++;
                 }
@@ -108,6 +112,7 @@
                 if ([self hasDownAtX:x Y:y]) {
 //                    NSLog(@"Found down");
                     [downClueMap setValue:clues[clueIdx] forKey:numString];
+                    [labelMap setValue:numString forKey:coordString];
                     assigned = YES;
                     clueIdx++;
                 }
@@ -118,28 +123,32 @@
         
         self.acrossClues = acrossClueMap;
         self.downClues = downClueMap;
-
+        self.labelMap = labelMap;
         NSLog(@"%@", acrossClueMap);
         NSLog(@"%@", downClueMap);
     }
     return self;
 }
 
-- (BOOL) isBlackAtX:(int) x Y:(int) y {
+-(BOOL) isBlackAtX:(int) x Y:(int) y {
     return [self.boardLayout[y] characterAtIndex:x] == 46;
 }
 
-- (BOOL) hasAcrossAtX:(int) x Y:(int) y {
+-(BOOL) hasAcrossAtX:(int) x Y:(int) y {
     if (x == 0 || [self isBlackAtX:x - 1 Y:y]) {
         return x + 1 < self.width && ![self isBlackAtX:x + 1 Y:y];
     }
     return NO;
 }
 
-- (BOOL) hasDownAtX:(int) x Y:(int) y {
+-(BOOL) hasDownAtX:(int) x Y:(int) y {
     if (y== 0 || [self isBlackAtX:x Y:y - 1]) {
         return y + 1 < self.height && ![self isBlackAtX:x Y:y + 1];
     }
     return NO;
+}
+
+-(BOOL) hasLabelAtX:(int) x Y:(int) y {
+    return [self hasDownAtX:(int)x Y:(int)y] || [self hasAcrossAtX:(int)x Y:(int)y];
 }
 @end
