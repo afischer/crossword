@@ -13,9 +13,17 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GameGrid : NSTableView <NSTableViewDelegate, NSTableViewDataSource>
+
+typedef enum {
+    AnswerDirectionAcross,
+    AnswerDirectionDown
+} AnswerDirection;
+
 @property (strong, nonatomic) Crossword *crossword;
+@property (nonatomic) AnswerDirection currDirection;
 @property (strong, nonatomic) GridCellView *currentCell;
 @property (strong, nonatomic) NSArray *acrossCells;
+@property (strong, nonatomic) NSArray *downCells;
 - (void) setupWithCrossword:(Crossword *)crossword;
 - (void) clearSelection;
 @end

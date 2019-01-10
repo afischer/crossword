@@ -10,9 +10,11 @@
 
 @implementation GameGrid
 
+
 - (void)awakeFromNib {
     self.delegate = self;
     self.dataSource = self;
+    self.currDirection = AnswerDirectionAcross;
 //    self.acceptsFirstResponder = NO;
 }
 
@@ -20,7 +22,6 @@
     [super drawRect:dirtyRect];
     // Drawing code here.
 }
-
 - (void)setupWithCrossword:(Crossword *)crossword {
     self.crossword = crossword;
     
@@ -40,11 +41,11 @@
 
 
 -(void) createClueArrays {
-    // TODO: downTable
-    //     CREATE ARRAYS FOR EACH CLUE
     NSMutableArray *acrossClueCells = [[NSMutableArray alloc] init];
+    NSMutableArray *downClueCells = [[NSMutableArray alloc] init];
     NSMutableArray *clueCells = nil;
-    // acrosses
+    
+    // across cells
     for (int row = 0; row < [self numberOfRows]; row++) {
         for (int col = 0; col < [self numberOfColumns]; col++) {
             GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
@@ -60,8 +61,30 @@
     }
     [acrossClueCells addObject:clueCells]; // add last clue
     
+    // reset clueCells
+    clueCells = nil;
+
+    // across cells
+    for (int col = 0; col < [self numberOfColumns]; col++) {
+        for (int row = 0; row < [self numberOfRows]; row++) {
+            GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+            if ([self.crossword isBlackAtX:col Y:row]) continue;
+            
+            if ([self.crossword hasDownAtX:col Y:row]) { // new across clue
+                if (clueCells) [downClueCells addObject:clueCells]; // add to across cell array
+                clueCells = [[NSMutableArray alloc] init]; // reset current cell arr
+            }
+            
+            [clueCells addObject:cell];
+        }
+    }
+    [downClueCells addObject:clueCells]; // add last clue
+    
     NSLog(@"Found %lu across clues", (unsigned long)[acrossClueCells count]);
+    NSLog(@"Found %lu across clues", (unsigned long)[downClueCells count]);
+
     self.acrossCells = acrossClueCells;
+    self.downCells = downClueCells;
 }
 
 
@@ -91,7 +114,7 @@
         }
         
         // Set text
-        [cell.textField setStringValue:@"Z"];
+        [cell.textField setStringValue:@" "];
     }
     return cell;
 }
@@ -105,10 +128,7 @@
 # pragma mark - Click handling
 - (void)mouseDown:(NSEvent *)event {
     // FIXME: FIND BETTER WAY TO DO THIS
-    if (!self.acrossCells) {
-        [self createClueArrays];
-    }
-    
+    if (!self.acrossCells) [self createClueArrays];
     
     NSPoint location = [event locationInWindow];
     NSPoint gridLocation = [self convertPoint:location toView:nil];
@@ -137,24 +157,50 @@
     
     // get clicked cell
     GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+    if ([cell isEqual:self.currentCell]) {
+        self.currDirection = self.currDirection ? AnswerDirectionAcross : AnswerDirectionDown;
+    }
+    
+    NSLog(@"Current direction is %u", self.currDirection);
     self.currentCell = cell;
 
     // find group of cells with same clue
     NSArray *currentCellGroup = nil;
-    for (NSArray *cellGroup in self.acrossCells) {
+    NSArray *oppositeCellGroup = nil;
+    NSArray *cellGroups = self.currDirection ? self.downCells : self.acrossCells;
+    NSArray *oppositeGroups = self.currDirection ? self.acrossCells : self.downCells;
+
+    // get cell group for current direction
+    for (NSArray *cellGroup in cellGroups) {
         if ([cellGroup containsObject:cell]) {
             currentCellGroup = cellGroup;
             break;
         }
     }
     
+    GridCellView *firstCell = currentCellGroup[0];
+    NSLog(@"Selected clue %@", firstCell.hintLabel.stringValue);
+    
     // set background color of clue
     for (GridCellView *cellView in currentCellGroup) {
-        [cellView.layer setBackgroundColor:[[NSColor systemGreenColor] CGColor]];
+        [cellView.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
+    }
+    
+    // Get cell group for opposite direciton
+    for (NSArray *cellGroup in oppositeGroups) {
+        if ([cellGroup containsObject:cell]) {
+            oppositeCellGroup = cellGroup;
+            break;
+        }
+    }
+    
+    // set background color of opposite drirection
+    for (GridCellView *cellView in oppositeCellGroup) {
+        [cellView.layer setBackgroundColor:[[NSColor lightGrayColor] CGColor]];
     }
     
     // set backgorund color of clicked cell
-    [cell.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
+    [cell.layer setBackgroundColor:[[NSColor blueColor] CGColor]];
 }
 
 - (void)keyDown:(NSEvent *)event {
