@@ -1,14 +1,14 @@
 //
-//  GameGrid.m
+//  GameGridView.m
 //  Crossword
 //
 //  Created by Andrew Fischer on 1/5/19.
 //  Copyright © 2019 Andrew Fischer. All rights reserved.
 //
 
-#import "GameGrid.h"
+#import "GameGridView.h"
 
-@implementation GameGrid
+@implementation GameGridView
 
 
 - (void)awakeFromNib {
@@ -134,7 +134,7 @@
     NSPoint gridLocation = [self convertPoint:location toView:nil];
     NSPoint realLocation = CGPointMake(gridLocation.x - 40, gridLocation.y); // FIXME: Why is the x coordinate off?
     
-    [self selectClueForCellLocation:realLocation vertical:NO];
+    [self selectClueForCellLocation:realLocation];
 }
 
 - (void) clearSelection{
@@ -147,29 +147,36 @@
     }
 }
 
-- (void) selectClueForCellLocation:(NSPoint)point vertical:(BOOL)vertical {
+- (void) selectClueForCellLocation:(NSPoint)point {
     
     NSInteger row = [self rowAtPoint:point];
     NSInteger col = [self columnAtPoint:point];
     
     if ([self.crossword isBlackAtX:col Y:row]) return; // DO nothing, clicked black.
-    [self clearSelection]; // Clear board colors
     
     // get clicked cell
     GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+    [self selectClueForCell:cell];
+}
+
+- (void) selectClueForCell:(GridCellView *)cell {
+    if (!cell) return; // if cell doesn't exist, do nothing
+    
+    [self clearSelection]; // Clear board colors
+    
     if ([cell isEqual:self.currentCell]) {
         self.currDirection = self.currDirection ? AnswerDirectionAcross : AnswerDirectionDown;
     }
     
     NSLog(@"Current direction is %u", self.currDirection);
     self.currentCell = cell;
-
+    
     // find group of cells with same clue
     NSArray *currentCellGroup = nil;
     NSArray *oppositeCellGroup = nil;
     NSArray *cellGroups = self.currDirection ? self.downCells : self.acrossCells;
     NSArray *oppositeGroups = self.currDirection ? self.acrossCells : self.downCells;
-
+    
     // get cell group for current direction
     for (NSArray *cellGroup in cellGroups) {
         if ([cellGroup containsObject:cell]) {
@@ -181,6 +188,7 @@
     GridCellView *firstCell = currentCellGroup[0];
     NSLog(@"Selected clue %@", firstCell.hintLabel.stringValue);
     
+    self.currentCellGroup = currentCellGroup;
     // set background color of clue
     for (GridCellView *cellView in currentCellGroup) {
         [cellView.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
@@ -206,8 +214,48 @@
 - (void)keyDown:(NSEvent *)event {
     if ([event keyCode] > 122 && [event keyCode] < 127) {
         NSLog(@"KEY EVENT");
+        [self handleKeyEvent:event];
         return;
     }
     self.currentCell.textField.stringValue = [[event characters] uppercaseString];
+}
+
+- (void)handleKeyEvent:(NSEvent *)event {
+    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    
+    switch ([[event characters] characterAtIndex:0]) {
+        case NSUpArrowFunctionKey:
+            // rotate selection if change dirs
+            if (self.currDirection == AnswerDirectionAcross) return [self rotateSelection];
+            // get previous cell in column otherwise
+            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
+
+        case NSDownArrowFunctionKey:
+            // rotate selection if change dirs
+            if (self.currDirection == AnswerDirectionAcross) return [self rotateSelection];
+            // get next cell in column otherwise
+            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
+
+        case NSRightArrowFunctionKey:
+            // rotate selection if change dirs
+            if (self.currDirection == AnswerDirectionDown) return [self rotateSelection];
+            // get next cell in row otherwise
+            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
+
+
+        case NSLeftArrowFunctionKey:
+            // rotate selection if change dirs
+            if (self.currDirection == AnswerDirectionDown) return [self rotateSelection];
+            // get previous cell in row otherwise
+            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
+
+            
+        default:
+            break;
+    }
+}
+
+- (void) rotateSelection {
+    [self selectClueForCell:self.currentCell];
 }
 @end
