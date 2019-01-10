@@ -7,7 +7,6 @@
 //
 
 #import "GameGrid.h"
-#import "GridCellView.h"
 
 @implementation GameGrid
 
@@ -19,7 +18,6 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    
     // Drawing code here.
 }
 
@@ -31,43 +29,46 @@
     
     while ([self numberOfColumns] < crossword.width) {
         [self addTableColumn:[[NSTableColumn alloc] init]];
-        NSLog(@"at %ld columns ", (long)self.numberOfColumns);
     }
     
     while ([self numberOfRows] < crossword.height) {
         [self insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NO];
-        NSLog(@"at %ld rows ", (long)self.numberOfRows);
     }
     
-    self.rowHeight = 65;
     [self endUpdates];
 }
 
 
+-(void) createClueArrays {
+    // TODO: downTable
+    //     CREATE ARRAYS FOR EACH CLUE
+    NSMutableArray *acrossClueCells = [[NSMutableArray alloc] init];
+    NSMutableArray *clueCells = nil;
+    // acrosses
+    for (int row = 0; row < [self numberOfRows]; row++) {
+        for (int col = 0; col < [self numberOfColumns]; col++) {
+            GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+            if ([self.crossword isBlackAtX:col Y:row]) continue;
+            
+            if ([self.crossword hasAcrossAtX:col Y:row]) { // new across clue
+                if (clueCells) [acrossClueCells addObject:clueCells]; // add to across cell array
+                clueCells = [[NSMutableArray alloc] init]; // reset current cell arr
+            }
+
+            [clueCells addObject:cell];
+        }
+    }
+    [acrossClueCells addObject:clueCells]; // add last clue
+    
+    NSLog(@"Found %lu across clues", (unsigned long)[acrossClueCells count]);
+    self.acrossCells = acrossClueCells;
+}
+
 
 # pragma mark - NSTableViewDelegate
-/*
-- (void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    NSUInteger col = [[self tableColumns] indexOfObject:tableColumn];
-    [cell setDrawsBackground:YES];
-    [cell setAlignment:NSTextAlignmentCenter];
-    [cell setFont:[NSFont systemFontOfSize:16 weight:NSFontWeightRegular]];
-//    [cell setFrame:NSMakeRect(0, self.rowHeight/2, tableColumn.width, self.rowHeight)];
-    
-    
-//    NSRect(x:0.0, y:myTableView.rowHeight/2, width:tableColumn!.width, height:myTableView.rowHeight
-    // NSMakeRect(0, self.rowHeight/2, tableColumn.width, self.rowHeight)
-    if ([self.crossword isBlackAtX:(int)col Y:(int)row]) {
-        [cell setBackgroundColor:[NSColor blackColor]];
-    } else {
-        [cell setBackgroundColor:[NSColor whiteColor]];
-    }
-}*/
-
 - (NSView *)tableView:(NSTableView *)tableView
    viewForTableColumn:(NSTableColumn *)tableColumn
                   row:(NSInteger)row {
-    
     GridCellView *cell = [tableView makeViewWithIdentifier:@"GridCell" owner:nil];
     cell.wantsLayer = YES;
 
@@ -98,20 +99,17 @@
 
 
 # pragma mark - NSTableViewDataSource
-//- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-////    NSUInteger col = [[self tableColumns] indexOfObject:tableColumn];
-////    NSView *view = [self viewAtColumn:col row:row makeIfNecessary:NO];
-//    return @"X";
-//}
-
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView { return 0; }
-
-//- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-
 
 
 # pragma mark - Click handling
 - (void)mouseDown:(NSEvent *)event {
+    // FIXME: FIND BETTER WAY TO DO THIS
+    if (!self.acrossCells) {
+        [self createClueArrays];
+    }
+    
+    
     NSPoint location = [event locationInWindow];
     NSPoint gridLocation = [self convertPoint:location toView:nil];
     NSPoint realLocation = CGPointMake(gridLocation.x - 40, gridLocation.y); // FIXME: Why is the x coordinate off?
@@ -119,49 +117,51 @@
     [self selectClueForCellLocation:realLocation vertical:NO];
 }
 
-//- (GridCellView *)cellForLocation:(NSPoint)location {
-//    NSInteger row = [self rowAtPoint:location];
-//    NSInteger col = [self columnAtPoint:location];
-//    return [self viewAtColumn:col row:row makeIfNecessary:NO];
-//}
+- (void) clearSelection{
+    for (int col = 0; col < self.crossword.width; col++) {
+        for (int row = 0; row < self.crossword.height; row++) {
+            if ([self.crossword isBlackAtX:col Y:row]) continue;
+            GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+            [cell.layer setBackgroundColor:[[NSColor whiteColor] CGColor]];
+        }
+    }
+}
 
 - (void) selectClueForCellLocation:(NSPoint)point vertical:(BOOL)vertical {
+    
     NSInteger row = [self rowAtPoint:point];
     NSInteger col = [self columnAtPoint:point];
-
-    GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+    
     if ([self.crossword isBlackAtX:col Y:row]) return; // DO nothing, clicked black.
-    [cell.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
+    [self clearSelection]; // Clear board colors
+    
+    // get clicked cell
+    GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
+    self.currentCell = cell;
 
-    // TODO: Check if cell itself is black
-    
-    int lCol = (int)col - 1;
-    int rCol = (int)col + 1;
-    GridCellView *lCell = nil;
-    GridCellView *rCell = nil;
-    
-    // check if in bounds for left and right, set indices
-    if (lCol < self.crossword.width && ![self.crossword isBlackAtX:(int)lCol Y:(int)row]) {
-        lCell = [self viewAtColumn:lCol row:row makeIfNecessary:NO];
-    }
-    if (rCol < self.crossword.width && ![self.crossword isBlackAtX:(int)rCol Y:(int)row]) {
-        rCell = [self viewAtColumn:rCol row:row makeIfNecessary:NO];
+    // find group of cells with same clue
+    NSArray *currentCellGroup = nil;
+    for (NSArray *cellGroup in self.acrossCells) {
+        if ([cellGroup containsObject:cell]) {
+            currentCellGroup = cellGroup;
+            break;
+        }
     }
     
-    while (rCell) {
-        [rCell.layer setBackgroundColor:[[NSColor systemGreenColor] CGColor]];
-        if (rCol + 1 < self.crossword.width && ![self.crossword isBlackAtX:rCol + 1 Y:(int)row]) { // not black or OOB
-            rCol++;
-            rCell = [self viewAtColumn:rCol row:row makeIfNecessary:NO];
-        } else { rCell = nil; }
+    // set background color of clue
+    for (GridCellView *cellView in currentCellGroup) {
+        [cellView.layer setBackgroundColor:[[NSColor systemGreenColor] CGColor]];
     }
     
-    while (lCell) {
-        [lCell.layer setBackgroundColor:[[NSColor systemGreenColor] CGColor]];
-        if (lCol - 1 >= 0 && ![self.crossword isBlackAtX:lCol - 1 Y:(int)row]) { // not black or OOB
-            lCol--;
-            lCell = [self viewAtColumn:lCol row:row makeIfNecessary:NO];
-        } else { lCell = nil; }
+    // set backgorund color of clicked cell
+    [cell.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
+}
+
+- (void)keyDown:(NSEvent *)event {
+    if ([event keyCode] > 122 && [event keyCode] < 127) {
+        NSLog(@"KEY EVENT");
+        return;
     }
+    self.currentCell.textField.stringValue = [[event characters] uppercaseString];
 }
 @end

@@ -49,46 +49,14 @@
     [self.acrossList reloadData];
     [self.downList reloadData];
     
-    
-    /*
-    [self.gameTable beginUpdates];
-    while ([self.gameTable numberOfColumns] < self.crossword.width) {
-        [self.gameTable addTableColumn:[[NSTableColumn alloc] init]];
-        NSLog(@"at %ld columns ", (long)self.gameTable.numberOfColumns);
-    }
-    
-    while ([self.gameTable numberOfRows] < self.crossword.height) {
-        [self.gameTable insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NO];
-        NSLog(@"at %ld rows ", (long)self.gameTable.numberOfRows);
-    }
-    [self.gameTable endUpdates];
-    */
-    
+    // Initialize game board
     [self.gameTable setupWithCrossword:self.crossword];
-    // TODO: MAKE A DELEGATE FOR THE GAME BOARD
     
-
-    
-
     // table sizing
     [self.gameTable sizeToFit];
     
     // FIXME: for asymetric puzzles, this will break if the puzzle is taller than wide
     self.gameTable.rowHeight = self.gameTable.tableColumns[0].width;
-    
-    
-//    for (int y = 0; y < self.gameTable.numberOfColumns; y++) {
-//        for (int x = 0; x < self.gameTable.numberOfRows; x++) {
-//            NSTableCellView *cell = [self.gameTable viewAtColumn:y row:x makeIfNecessary:NO];
-//            if ([self.crossword isBlackAtX:x Y:y]) {
-////                cell.wantsLayer = YES;
-////                cell.layer.backgroundColor = [[NSColor blackColor] CGColor];
-////                cell.textField.stringValue = @"X";
-//            }
-//        }
-//    }
-
-
 }
 
 - (void)setRepresentedObject:(id)representedObject {
