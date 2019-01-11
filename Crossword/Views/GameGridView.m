@@ -7,6 +7,7 @@
 //
 
 #import "GameGridView.h"
+#import "ViewController.h"
 
 @implementation GameGridView
 
@@ -168,7 +169,6 @@
         self.currDirection = self.currDirection ? AnswerDirectionAcross : AnswerDirectionDown;
     }
     
-    NSLog(@"Current direction is %u", self.currDirection);
     self.currentCell = cell;
     
     // find group of cells with same clue
@@ -184,9 +184,6 @@
             break;
         }
     }
-    
-    GridCellView *firstCell = currentCellGroup[0];
-    NSLog(@"Selected clue %@", firstCell.hintLabel.stringValue);
     
     self.currentCellGroup = currentCellGroup;
     // set background color of clue
@@ -209,45 +206,56 @@
     
     // set backgorund color of clicked cell
     [cell.layer setBackgroundColor:[[NSColor blueColor] CGColor]];
+    
+    // select clues in sidebar
+    GridCellView *currFirstCell = currentCellGroup[0];
+    GridCellView *oppositeFirstCell = oppositeCellGroup[0];
+    
+    // TODO: seems like a dirty way to do this
+    ViewController *vc = (ViewController *)self.window.contentViewController;
+    [vc.acrossList selectHintWithKey:currFirstCell.hintLabel.stringValue];
+    [vc.downList selectHintWithKey:oppositeFirstCell.hintLabel.stringValue];
 }
 
 - (void)keyDown:(NSEvent *)event {
     if ([event keyCode] > 122 && [event keyCode] < 127) {
         NSLog(@"KEY EVENT");
-        [self handleKeyEvent:event];
-        return;
+        return [self handleKeyEvent:event];
+    } else if ([event keyCode] == 51) {
+        self.currentCell.textField.stringValue = @"";
+        return [self selectPreviousSquare];
     }
+    NSLog(@"KEY CODE IS %hu", [event keyCode]);
     self.currentCell.textField.stringValue = [[event characters] uppercaseString];
+    [self selectNextSquare];
 }
 
 - (void)handleKeyEvent:(NSEvent *)event {
-    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
-    
     switch ([[event characters] characterAtIndex:0]) {
         case NSUpArrowFunctionKey:
             // rotate selection if change dirs
             if (self.currDirection == AnswerDirectionAcross) return [self rotateSelection];
             // get previous cell in column otherwise
-            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
+            return [self selectPreviousSquare];
 
         case NSDownArrowFunctionKey:
             // rotate selection if change dirs
             if (self.currDirection == AnswerDirectionAcross) return [self rotateSelection];
             // get next cell in column otherwise
-            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
-
+            return [self selectNextSquare];
+            
         case NSRightArrowFunctionKey:
             // rotate selection if change dirs
             if (self.currDirection == AnswerDirectionDown) return [self rotateSelection];
             // get next cell in row otherwise
-            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
+            return [self selectNextSquare];
 
 
         case NSLeftArrowFunctionKey:
             // rotate selection if change dirs
             if (self.currDirection == AnswerDirectionDown) return [self rotateSelection];
             // get previous cell in row otherwise
-            return [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
+            return [self selectPreviousSquare];
 
             
         default:
@@ -257,5 +265,18 @@
 
 - (void) rotateSelection {
     [self selectClueForCell:self.currentCell];
+}
+
+
+// TODO: CHECK OOB CONDITIONS
+- (void) selectNextSquare {
+    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
+}
+
+// TODO: CHECK OOB CONDITIONS
+- (void) selectPreviousSquare {
+    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
 }
 @end
