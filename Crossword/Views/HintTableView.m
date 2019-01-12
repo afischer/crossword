@@ -7,6 +7,7 @@
 //
 
 #import "HintTableView.h"
+#import "ViewController.h"
 
 @implementation HintTableView
 - (void)awakeFromNib {
@@ -85,5 +86,11 @@
     [self selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
     [self scrollRowToVisible:index];
     return YES;
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)notification {
+    NSTableCellView *selectedCell = [self viewAtColumn:0 row:self.selectedRow makeIfNecessary:NO];
+    NSString *hintNumString = [selectedCell.textField.stringValue substringWithRange:NSMakeRange(0, selectedCell.textField.stringValue.length - 1)];
+    NSLog(@"Selected %@ %@", hintNumString, self.identifier);
 }
 @end

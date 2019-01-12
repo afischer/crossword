@@ -26,6 +26,7 @@
     if (!puzzleDoc.crossword) return; // no valid crossword
     
     self.crossword = puzzleDoc.crossword;
+    self.view.window.title = self.crossword.name;
     
     // set text labels
     [self.titleText setStringValue:self.crossword.name];
