@@ -16,13 +16,13 @@
     self.delegate = self;
     self.dataSource = self;
     self.currDirection = AnswerDirectionAcross;
-//    self.acceptsFirstResponder = NO;
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     // Drawing code here.
 }
+
 - (void)setupWithCrossword:(Crossword *)crossword {
     self.crossword = crossword;
     
@@ -271,12 +271,20 @@
 // TODO: CHECK OOB CONDITIONS
 - (void) selectNextSquare {
     NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    if (currIndex + 1 >= self.currentCellGroup.count) {
+        NSLog(@"Can't move, should go to next answer space here");
+        return;
+    }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
 }
 
 // TODO: CHECK OOB CONDITIONS
 - (void) selectPreviousSquare {
     NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    if (currIndex - 1 == -1) {
+        NSLog(@"Can't move, should go to prev answer space here");
+        return;
+    }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
 }
 @end

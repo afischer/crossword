@@ -51,9 +51,9 @@
 - (NSView *)tableView:(NSTableView *)tableView
    viewForTableColumn:(NSTableColumn *)tableColumn
                   row:(NSInteger)row {
-//    NSTextView *cell = [tableView makeViewWithIdentifier:@"hintLabelView" owner:nil];
-    NSTextView *cell = [[NSTextView alloc] init];
-    [cell setDrawsBackground:NO];
+    NSTableCellView *cell = [tableView makeViewWithIdentifier:@"ClueCell" owner:nil];
+//    NSTextView *cell = [[NSTextView alloc] init];
+//    [cell setDrawsBackground:NO];
 //    [cell respondsToSelector:NO];
 //    [cell isEditable:NO];
     
@@ -61,10 +61,10 @@
     NSString *clueNum = self.clueKeys[row];
     
     if ([tableColumn.identifier isEqualTo:@"number"]) {
-        cell.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
-        cell.string = [clueNum stringByAppendingString:@"."];
+        cell.textField.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
+        cell.textField.stringValue = [clueNum stringByAppendingString:@"."];
     } else {
-        cell.string = self.clues[clueNum];
+        cell.textField.stringValue = self.clues[clueNum];
     }
     return cell;
 }
@@ -73,8 +73,8 @@
     NSString *keyString = [key stringByAppendingString:@"."];
     int index = -1;
     for (int row = 0; row < self.numberOfRows; row++) {
-        NSTextView *cell = [self viewAtColumn:0 row:row makeIfNecessary:NO];
-        if ([cell.string isEqualToString:keyString]) {
+        NSTableCellView *cell = [self viewAtColumn:0 row:row makeIfNecessary:NO];
+        if ([cell.textField.stringValue isEqualToString:keyString]) {
             index = row;
             break;
         }
