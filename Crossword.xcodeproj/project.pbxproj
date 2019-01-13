@@ -19,6 +19,7 @@
 		2E32AE9F21E1367800090646 /* GameGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AE9E21E1367800090646 /* GameGridView.m */; };
 		2E32AEA421E271C600090646 /* GridCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AEA321E271C600090646 /* GridCellView.m */; };
 		2E32AEA821E91EA000090646 /* HintTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AEA721E91EA000090646 /* HintTableView.m */; };
+		2E32AEAB21EBA8AF00090646 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2E32AEAA21EBA8AF00090646 /* LICENSE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		2E32AEA321E271C600090646 /* GridCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridCellView.m; sourceTree = "<group>"; };
 		2E32AEA621E91EA000090646 /* HintTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HintTableView.h; sourceTree = "<group>"; };
 		2E32AEA721E91EA000090646 /* HintTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HintTableView.m; sourceTree = "<group>"; };
+		2E32AEA921EBA6EB00090646 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		2E32AEAA21EBA8AF00090646 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +98,8 @@
 		2E00055921D30525006F12E8 = {
 			isa = PBXGroup;
 			children = (
+				2E32AEA921EBA6EB00090646 /* README.md */,
+				2E32AEAA21EBA8AF00090646 /* LICENSE */,
 				2E00056421D30525006F12E8 /* Crossword */,
 				2E00057E21D30526006F12E8 /* CrosswordTests */,
 				2E00058921D30526006F12E8 /* CrosswordUITests */,
@@ -267,6 +272,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E32AEAB21EBA8AF00090646 /* LICENSE in Resources */,
 				2E00056F21D30526006F12E8 /* Assets.xcassets in Resources */,
 				2E00057221D30526006F12E8 /* Main.storyboard in Resources */,
 			);
