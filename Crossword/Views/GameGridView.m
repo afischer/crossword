@@ -20,6 +20,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+    // must be done after drawing as it iterates over views.
+    if (!self.acrossCells) [self createClueArrays];
     // Drawing code here.
 }
 
@@ -128,9 +130,6 @@
 
 # pragma mark - Click handling
 - (void)mouseDown:(NSEvent *)event {
-    // FIXME: FIND BETTER WAY TO DO THIS
-    if (!self.acrossCells) [self createClueArrays];
-    
     NSPoint location = [event locationInWindow];
     NSPoint gridLocation = [self convertPoint:location toView:nil];
     NSPoint realLocation = CGPointMake(gridLocation.x - 40, gridLocation.y); // FIXME: Why is the x coordinate off?
@@ -160,6 +159,8 @@
     [self selectClueForCell:cell];
 }
 
+// TODO: Fix this weird broken directional logic. Should just keep track of across
+//       and down clues and choose correct one based on direction.
 - (void) selectClueForCell:(GridCellView *)cell {
     if (!cell) return; // if cell doesn't exist, do nothing
     
@@ -218,16 +219,32 @@
 }
 
 - (void)keyDown:(NSEvent *)event {
-    if ([event keyCode] > 122 && [event keyCode] < 127) {
-        NSLog(@"KEY EVENT");
-        return [self handleKeyEvent:event];
-    } else if ([event keyCode] == 51) {
-        self.currentCell.textField.stringValue = @"";
-        return [self selectPreviousSquare];
-    }
     NSLog(@"KEY CODE IS %hu", [event keyCode]);
-    self.currentCell.textField.stringValue = [[event characters] uppercaseString];
-    [self selectNextSquare];
+
+    switch ([event keyCode]) {
+        case 126: // up
+        case 125: // down
+        case 124: // right
+        case 123: // left
+            return [self handleKeyEvent:event];
+        case 48: // tab
+            return [self selectNextClue];
+        case 51: // backspace
+            self.currentCell.textField.stringValue = @"";
+            return [self selectPreviousSquare];
+        default:
+            self.currentCell.textField.stringValue = [[event characters] uppercaseString];
+            return [self selectNextSquare];
+    }
+    
+//    if ([event keyCode] > 122 && [event keyCode] < 127) {
+//        NSLog(@"KEY EVENT");
+//    } else if ([event keyCode] == 51) {
+//        self.currentCell.textField.stringValue = @"";
+//        return [self selectPreviousSquare];
+//    }
+//    self.currentCell.textField.stringValue = [[event characters] uppercaseString];
+//    [self selectNextSquare];
 }
 
 - (void)handleKeyEvent:(NSEvent *)event {
@@ -272,7 +289,7 @@
 - (void) selectNextSquare {
     NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
     if (currIndex + 1 >= self.currentCellGroup.count) {
-        NSLog(@"Can't move, should go to next answer space here");
+        [self selectNextClue];
         return;
     }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
@@ -286,5 +303,30 @@
         return;
     }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
+}
+
+- (void) selectNextClue {
+    if (self.currDirection == AnswerDirectionAcross) {
+        NSUInteger i = [self.acrossCells indexOfObject:self.currentCellGroup];
+        if (i + 1 >= self.acrossCells.count) return; // at last clue, TODO: Switch directions
+        self.currentCellGroup = [self.acrossCells objectAtIndex:i + 1];
+    } else {
+        NSUInteger i = [self.downCells indexOfObject:self.currentCellGroup];
+        if (i + 1 >= self.downCells.count) return; // at last clue, TODO: switch directions
+        self.currentCellGroup = [self.acrossCells objectAtIndex:i + 1];
+    }
+    [self selectClueForCell:self.currentCellGroup[0]];
+}
+
+// TODO: down
+- (void) selectClue:(NSString *)num withDirection:(AnswerDirection)dir {
+    NSLog(@"hi there");
+    for (NSArray *cellGroup in self.acrossCells) {
+        NSLog(@"hi there %@", cellGroup);
+        GridCellView *cell = cellGroup[0];
+        if ([cell.hintLabel.stringValue isEqualToString:num]) {
+            [self selectClueForCell:cell];
+        }
+    }
 }
 @end

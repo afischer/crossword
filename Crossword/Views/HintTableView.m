@@ -9,10 +9,23 @@
 #import "HintTableView.h"
 #import "ViewController.h"
 
+// Subclass NSTextView to override hitTest:point
+@interface NoClickLabel : NSTextView @end
+@implementation NoClickLabel
+- (instancetype)init {
+    self = [super init];
+    self.drawsBackground = NO;
+    self.selectable = NO;
+    return self;
+}
+- (NSView *)hitTest:(NSPoint)point { return nil; }
+@end
+
 @implementation HintTableView
 - (void)awakeFromNib {
     self.delegate = self;
     self.dataSource = self;
+    [self sizeToFit];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -49,33 +62,41 @@
     return @"";
 }
 */
+
+// TODO: Autolayout so automatic height can be used
 - (NSView *)tableView:(NSTableView *)tableView
    viewForTableColumn:(NSTableColumn *)tableColumn
                   row:(NSInteger)row {
-    NSTableCellView *cell = [tableView makeViewWithIdentifier:@"ClueCell" owner:nil];
-//    NSTextView *cell = [[NSTextView alloc] init];
-//    [cell setDrawsBackground:NO];
-//    [cell respondsToSelector:NO];
-//    [cell isEditable:NO];
-    
+    NoClickLabel *cell = [[NoClickLabel alloc] init];
     
     NSString *clueNum = self.clueKeys[row];
     
     if ([tableColumn.identifier isEqualTo:@"number"]) {
-        cell.textField.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
-        cell.textField.stringValue = [clueNum stringByAppendingString:@"."];
+        cell.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
+        cell.string = [clueNum stringByAppendingString:@"."];
     } else {
-        cell.textField.stringValue = self.clues[clueNum];
+        cell.string = self.clues[clueNum];
     }
     return cell;
+    
+//    NSTableCellView *cell = [tableView makeViewWithIdentifier:@"ClueCell" owner:nil];
+//    NSString *clueNum = self.clueKeys[row];
+//
+//    if ([tableColumn.identifier isEqualTo:@"number"]) {
+//        cell.textField.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
+//        cell.textField.stringValue = [clueNum stringByAppendingString:@"."];
+//    } else {
+//        cell.textField.stringValue = self.clues[clueNum];
+//    }
+//    return cell;
 }
 
 - (BOOL) selectHintWithKey:(NSString *)key {
     NSString *keyString = [key stringByAppendingString:@"."];
     int index = -1;
     for (int row = 0; row < self.numberOfRows; row++) {
-        NSTableCellView *cell = [self viewAtColumn:0 row:row makeIfNecessary:NO];
-        if ([cell.textField.stringValue isEqualToString:keyString]) {
+        NSTextView *cell = [self viewAtColumn:0 row:row makeIfNecessary:NO];
+        if ([cell.string isEqualToString:keyString]) {
             index = row;
             break;
         }
@@ -88,9 +109,35 @@
     return YES;
 }
 
-- (void)tableViewSelectionDidChange:(NSNotification *)notification {
-    NSTableCellView *selectedCell = [self viewAtColumn:0 row:self.selectedRow makeIfNecessary:NO];
-    NSString *hintNumString = [selectedCell.textField.stringValue substringWithRange:NSMakeRange(0, selectedCell.textField.stringValue.length - 1)];
+// use mousedown because row selection can change without clicking.
+- (void)mouseDown:(NSEvent *)event {
+    [super mouseDown:event];
+    
+    NSTextView *selectedCell = [self viewAtColumn:0
+                                              row:self.selectedRow
+                                  makeIfNecessary:NO];
+
+    NSString *hintNumString = [selectedCell.string substringWithRange:NSMakeRange(0, selectedCell.string.length - 1)];
+    // TODO: seems like a dirty way to do this
+    ViewController *vc = (ViewController *)self.window.contentViewController;
+    AnswerDirection dir = [self.identifier isEqualToString:@"across"]
+    ? AnswerDirectionAcross
+    : AnswerDirectionDown;
+    [vc.gameTable selectClue:hintNumString withDirection:dir];
     NSLog(@"Selected %@ %@", hintNumString, self.identifier);
 }
+
+//- (void)tableViewSelectionDidChange:(NSNotification *)notification {
+//    NSTextView *selectedCell = [self viewAtColumn:0
+//                                              row:self.selectedRow
+//                                  makeIfNecessary:NO];
+//    NSString *hintNumString = [selectedCell.string substringWithRange:NSMakeRange(0, selectedCell.string.length - 1)];
+//    // TODO: seems like a dirty way to do this
+//    ViewController *vc = (ViewController *)self.window.contentViewController;
+//    AnswerDirection dir = [self.identifier isEqualToString:@"across"]
+//                          ? AnswerDirectionAcross
+//                          : AnswerDirectionDown;
+//    [vc.gameTable selectClue:hintNumString withDirection:dir];
+//    NSLog(@"Selected %@ %@", hintNumString, self.identifier);
+//}
 @end

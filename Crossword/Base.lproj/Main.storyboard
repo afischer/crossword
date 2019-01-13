@@ -841,20 +841,6 @@
                                                                                 <tableCellView identifier="hintLabelView" id="Oux-rl-fOd">
                                                                                     <rect key="frame" x="1" y="14" width="45" height="17"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                    <subviews>
-                                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m3I-nu-Jhl">
-                                                                                            <rect key="frame" x="0.0" y="0.0" width="45" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="odR-pS-aCL">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                    </subviews>
-                                                                                    <connections>
-                                                                                        <outlet property="textField" destination="m3I-nu-Jhl" id="l8s-UA-BLu"/>
-                                                                                    </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
                                                                         </tableColumn>
@@ -874,24 +860,6 @@
                                                                                 <tableCellView identifier="ClueCell" id="bqk-OE-sgQ">
                                                                                     <rect key="frame" x="49" y="14" width="198" height="33"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                    <subviews>
-                                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Pk-Pp-qUY">
-                                                                                            <rect key="frame" x="-2" y="0.0" width="202" height="34"/>
-                                                                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This is a hint for a clue that wraps to a second line" id="jPG-JV-O1t">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                    </subviews>
-                                                                                    <constraints>
-                                                                                        <constraint firstItem="9Pk-Pp-qUY" firstAttribute="width" secondItem="bqk-OE-sgQ" secondAttribute="width" id="PBc-6X-M1O"/>
-                                                                                        <constraint firstItem="9Pk-Pp-qUY" firstAttribute="centerX" secondItem="bqk-OE-sgQ" secondAttribute="centerX" id="Y7N-gg-pZu"/>
-                                                                                        <constraint firstItem="9Pk-Pp-qUY" firstAttribute="centerY" secondItem="bqk-OE-sgQ" secondAttribute="centerY" id="nGd-fe-tcG"/>
-                                                                                    </constraints>
-                                                                                    <connections>
-                                                                                        <outlet property="textField" destination="9Pk-Pp-qUY" id="Rk6-Mj-50j"/>
-                                                                                    </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
                                                                         </tableColumn>
@@ -945,20 +913,6 @@
                                                                                 <tableCellView identifier="hintLabelView" id="HX6-iP-9P4">
                                                                                     <rect key="frame" x="1" y="1" width="45" height="17"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                    <subviews>
-                                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T9N-Gj-hG0">
-                                                                                            <rect key="frame" x="0.0" y="0.0" width="45" height="17"/>
-                                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="qAe-Oz-1jp">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                    </subviews>
-                                                                                    <connections>
-                                                                                        <outlet property="textField" destination="T9N-Gj-hG0" id="1dT-uA-lm5"/>
-                                                                                    </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
                                                                         </tableColumn>
@@ -978,24 +932,6 @@
                                                                                 <tableCellView identifier="ClueCell" id="JPn-8N-ydI">
                                                                                     <rect key="frame" x="49" y="1" width="198" height="33"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                                    <subviews>
-                                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5FQ-4A-5fy">
-                                                                                            <rect key="frame" x="-2" y="0.0" width="202" height="34"/>
-                                                                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This is a hint for a clue that wraps to a second line" id="IZy-ZW-Rs7">
-                                                                                                <font key="font" metaFont="system"/>
-                                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                            </textFieldCell>
-                                                                                        </textField>
-                                                                                    </subviews>
-                                                                                    <constraints>
-                                                                                        <constraint firstItem="5FQ-4A-5fy" firstAttribute="width" secondItem="JPn-8N-ydI" secondAttribute="width" id="3pk-TB-V4K"/>
-                                                                                        <constraint firstItem="5FQ-4A-5fy" firstAttribute="centerY" secondItem="JPn-8N-ydI" secondAttribute="centerY" id="x99-Gc-A2b"/>
-                                                                                        <constraint firstItem="5FQ-4A-5fy" firstAttribute="centerX" secondItem="JPn-8N-ydI" secondAttribute="centerX" id="yCM-u8-tXs"/>
-                                                                                    </constraints>
-                                                                                    <connections>
-                                                                                        <outlet property="textField" destination="5FQ-4A-5fy" id="9cU-MW-kNF"/>
-                                                                                    </connections>
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
                                                                         </tableColumn>
