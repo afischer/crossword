@@ -21,7 +21,7 @@
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     // must be done after drawing as it iterates over views.
-    if (!self.acrossCells) [self createClueArrays];
+    if (self.crossword && !self.acrossCells) [self createClueArrays];
     // Drawing code here.
 }
 
@@ -142,7 +142,7 @@
         for (int row = 0; row < self.crossword.height; row++) {
             if ([self.crossword isBlackAtX:col Y:row]) continue;
             GridCellView *cell = [self viewAtColumn:col row:row makeIfNecessary:NO];
-            [cell.layer setBackgroundColor:[[NSColor whiteColor] CGColor]];
+            [cell.layer setBackgroundColor:[[NSColor controlBackgroundColor] CGColor]];
         }
     }
 }
@@ -173,35 +173,35 @@
     self.currentCell = cell;
     
     // find group of cells with same clue
-    NSArray *currentCellGroup = nil;
-    NSArray *oppositeCellGroup = nil;
-    NSArray *cellGroups = self.currDirection ? self.downCells : self.acrossCells;
-    NSArray *oppositeGroups = self.currDirection ? self.acrossCells : self.downCells;
+    NSArray *acrossClueCells = nil;
+    NSArray *downClueCells = nil;
     
-    // get cell group for current direction
-    for (NSArray *cellGroup in cellGroups) {
+    // get cell group for across direction
+    for (NSArray *cellGroup in self.acrossCells) {
         if ([cellGroup containsObject:cell]) {
-            currentCellGroup = cellGroup;
+            acrossClueCells = cellGroup;
             break;
         }
     }
     
-    self.currentCellGroup = currentCellGroup;
+    // Get cell group for down direciton
+    for (NSArray *cellGroup in self.downCells) {
+        if ([cellGroup containsObject:cell]) {
+            downClueCells = cellGroup;
+            break;
+        }
+    }
+    
+    self.currentCellGroup = self.currDirection == AnswerDirectionAcross ? acrossClueCells : downClueCells;
+    NSArray *oppositeClueCells = self.currDirection == AnswerDirectionAcross ? downClueCells : acrossClueCells;
+    
     // set background color of clue
-    for (GridCellView *cellView in currentCellGroup) {
+    for (GridCellView *cellView in self.currentCellGroup) {
         [cellView.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
     }
     
-    // Get cell group for opposite direciton
-    for (NSArray *cellGroup in oppositeGroups) {
-        if ([cellGroup containsObject:cell]) {
-            oppositeCellGroup = cellGroup;
-            break;
-        }
-    }
-    
     // set background color of opposite drirection
-    for (GridCellView *cellView in oppositeCellGroup) {
+    for (GridCellView *cellView in oppositeClueCells) {
         [cellView.layer setBackgroundColor:[[NSColor lightGrayColor] CGColor]];
     }
     
@@ -209,13 +209,15 @@
     [cell.layer setBackgroundColor:[[NSColor blueColor] CGColor]];
     
     // select clues in sidebar
-    GridCellView *currFirstCell = currentCellGroup[0];
-    GridCellView *oppositeFirstCell = oppositeCellGroup[0];
-    
+    GridCellView *acrossFirstCell = acrossClueCells[0];
+    GridCellView *downFirstCell = downClueCells[0];
+
     // TODO: seems like a dirty way to do this
     ViewController *vc = (ViewController *)self.window.contentViewController;
-    [vc.acrossList selectHintWithKey:currFirstCell.hintLabel.stringValue];
-    [vc.downList selectHintWithKey:oppositeFirstCell.hintLabel.stringValue];
+//    if (self.currDirection == AnswerDirectionAcross) {
+    [vc.acrossList selectHintWithKey:acrossFirstCell.hintLabel.stringValue];
+    [vc.downList selectHintWithKey:downFirstCell.hintLabel.stringValue];
+//    }
 }
 
 - (void)keyDown:(NSEvent *)event {
@@ -236,15 +238,6 @@
             self.currentCell.textField.stringValue = [[event characters] uppercaseString];
             return [self selectNextSquare];
     }
-    
-//    if ([event keyCode] > 122 && [event keyCode] < 127) {
-//        NSLog(@"KEY EVENT");
-//    } else if ([event keyCode] == 51) {
-//        self.currentCell.textField.stringValue = @"";
-//        return [self selectPreviousSquare];
-//    }
-//    self.currentCell.textField.stringValue = [[event characters] uppercaseString];
-//    [self selectNextSquare];
 }
 
 - (void)handleKeyEvent:(NSEvent *)event {
@@ -320,9 +313,8 @@
 
 // TODO: down
 - (void) selectClue:(NSString *)num withDirection:(AnswerDirection)dir {
-    NSLog(@"hi there");
-    for (NSArray *cellGroup in self.acrossCells) {
-        NSLog(@"hi there %@", cellGroup);
+    NSArray *searchCells = dir == AnswerDirectionAcross ? self.acrossCells : self.downCells;
+    for (NSArray *cellGroup in searchCells) {
         GridCellView *cell = cellGroup[0];
         if ([cell.hintLabel.stringValue isEqualToString:num]) {
             [self selectClueForCell:cell];

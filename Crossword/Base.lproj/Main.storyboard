@@ -687,9 +687,9 @@
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="Ckk-yw-fiv">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="196" y="240" width="583" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <toolbar key="toolbar" implicitIdentifier="7569EF74-50E2-41F3-A634-640FAC139C2A" autosavesConfiguration="NO" displayMode="iconOnly" sizeMode="regular" id="IdW-jA-qmN">
+                        <toolbar key="toolbar" implicitIdentifier="7569EF74-50E2-41F3-A634-640FAC139C2A" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="IdW-jA-qmN">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="AtF-yr-r4Q"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="hNK-wi-lrm"/>
@@ -719,17 +719,6 @@
                                         </buttonCell>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="3D2A82C8-3DE6-465D-A209-0CB8EE4EFDF4" label="Info" paletteLabel="Info" image="NSInfo" sizingBehavior="auto" id="D2g-pY-4yK">
-                                    <nil key="toolTip"/>
-                                    <button key="view" verticalHuggingPriority="750" id="7xm-x5-wDH">
-                                        <rect key="frame" x="0.0" y="14" width="45" height="25"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSInfo" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NCN-Lr-uW1">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
-                                </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="D1F32DA6-3CC1-4405-996D-C08FE6B84286" label="Check" paletteLabel="Check" image="NSMenuOnStateTemplate" sizingBehavior="auto" id="aiX-xp-rxT">
                                     <nil key="toolTip"/>
                                     <popUpButton key="view" verticalHuggingPriority="750" id="50j-t7-OYz">
@@ -749,15 +738,35 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                 </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="55742E15-D805-41E8-8912-FFF7D7959D35" label="Reveal" paletteLabel="Reveal" image="Wand" sizingBehavior="auto" id="XMH-zh-e34">
+                                    <nil key="toolTip"/>
+                                    <popUpButton key="view" verticalHuggingPriority="750" id="b2H-M0-NiA">
+                                        <rect key="frame" x="0.0" y="14" width="61" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <popUpButtonCell key="cell" type="roundTextured" title="Reveal" bezelStyle="texturedRounded" image="Wand" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="cI1-pj-ubW" id="C5A-gg-q2d">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="DEf-u3-pWa">
+                                                <items>
+                                                    <menuItem title="Reveal" state="on" image="Wand" hidden="YES" id="cI1-pj-ubW"/>
+                                                    <menuItem title="Square" id="Wvg-Si-wwg"/>
+                                                    <menuItem title="Clue" id="CbB-hc-GRV"/>
+                                                    <menuItem title="Puzzle" id="kye-IS-gCe"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
                                 <toolbarItem reference="4fa-Fy-4MP"/>
                                 <toolbarItem reference="GUo-bk-18R"/>
                                 <toolbarItem reference="LUQ-jc-rbv"/>
+                                <toolbarItem reference="XMH-zh-e34"/>
                                 <toolbarItem reference="aiX-xp-rxT"/>
-                                <toolbarItem reference="D2g-pY-4yK"/>
                                 <toolbarItem reference="hNK-wi-lrm"/>
                                 <toolbarItem reference="AtF-yr-r4Q"/>
+                                <toolbarItem reference="XMH-zh-e34"/>
                             </defaultToolbarItems>
                         </toolbar>
                         <connections>
@@ -770,7 +779,7 @@
                 </windowController>
                 <customObject id="6f7-a7-6o1" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="127" y="666"/>
+            <point key="canvasLocation" x="128" y="654"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -1063,8 +1072,8 @@
     <resources>
         <image name="NSGoBackTemplate" width="9" height="12"/>
         <image name="NSGoForwardTemplate" width="9" height="12"/>
-        <image name="NSInfo" width="128" height="128"/>
         <image name="NSMenuOnStateTemplate" width="12" height="12"/>
         <image name="NSRefreshTemplate" width="11" height="15"/>
+        <image name="Wand" width="64" height="64"/>
     </resources>
 </document>

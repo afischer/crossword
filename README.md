@@ -10,9 +10,20 @@ Lots still to do.
 
 ## TODO:
 - [ ] Fix bad casts...
+- [ ] Fix sidebar layout
+- [ ] Check for win state
+- [ ] Crossword addons
+  - [ ] Rebus, etc
+  - [ ] Timer
+- [ ] Clean up inconsistent variable naming
 - [ ] Learn about iterators
 - [ ] WindowController for menu bar actions
-- [ ] Answer Checking
-- [ ] Help
+  - [ ] Implement Check
+  - [ ] Implement Reveal
+- [ ] Nicer UI
+  - [ ] Puzzle autolayout
+  - [ ] Colors and Dark Mode
 - [ ] Saving
+- [ ] Printing
+- [ ] Threading??
 ... more

@@ -78,17 +78,6 @@
         cell.string = self.clues[clueNum];
     }
     return cell;
-    
-//    NSTableCellView *cell = [tableView makeViewWithIdentifier:@"ClueCell" owner:nil];
-//    NSString *clueNum = self.clueKeys[row];
-//
-//    if ([tableColumn.identifier isEqualTo:@"number"]) {
-//        cell.textField.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
-//        cell.textField.stringValue = [clueNum stringByAppendingString:@"."];
-//    } else {
-//        cell.textField.stringValue = self.clues[clueNum];
-//    }
-//    return cell;
 }
 
 - (BOOL) selectHintWithKey:(NSString *)key {
@@ -111,33 +100,21 @@
 
 // use mousedown because row selection can change without clicking.
 - (void)mouseDown:(NSEvent *)event {
-    [super mouseDown:event];
+    [super mouseDown:event]; // click row
     
     NSTextView *selectedCell = [self viewAtColumn:0
                                               row:self.selectedRow
                                   makeIfNecessary:NO];
 
     NSString *hintNumString = [selectedCell.string substringWithRange:NSMakeRange(0, selectedCell.string.length - 1)];
+    
     // TODO: seems like a dirty way to do this
     ViewController *vc = (ViewController *)self.window.contentViewController;
     AnswerDirection dir = [self.identifier isEqualToString:@"across"]
     ? AnswerDirectionAcross
     : AnswerDirectionDown;
+    vc.gameTable.currDirection = dir;
     [vc.gameTable selectClue:hintNumString withDirection:dir];
     NSLog(@"Selected %@ %@", hintNumString, self.identifier);
 }
-
-//- (void)tableViewSelectionDidChange:(NSNotification *)notification {
-//    NSTextView *selectedCell = [self viewAtColumn:0
-//                                              row:self.selectedRow
-//                                  makeIfNecessary:NO];
-//    NSString *hintNumString = [selectedCell.string substringWithRange:NSMakeRange(0, selectedCell.string.length - 1)];
-//    // TODO: seems like a dirty way to do this
-//    ViewController *vc = (ViewController *)self.window.contentViewController;
-//    AnswerDirection dir = [self.identifier isEqualToString:@"across"]
-//                          ? AnswerDirectionAcross
-//                          : AnswerDirectionDown;
-//    [vc.gameTable selectClue:hintNumString withDirection:dir];
-//    NSLog(@"Selected %@ %@", hintNumString, self.identifier);
-//}
 @end
