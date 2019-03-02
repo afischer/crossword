@@ -27,3 +27,9 @@ Lots still to do.
 - [ ] Printing
 - [ ] Threading??
 ... more
+
+*ignore me*
+
+https://www.nytimes.com/svc/crosswords/v3/puzzles.json
+
+https://www.nytimes.com/svc/crosswords/v2/puzzle/16292.puz // MUST BE LOGGED IN

@@ -84,7 +84,7 @@
     [downClueCells addObject:clueCells]; // add last clue
     
     NSLog(@"Found %lu across clues", (unsigned long)[acrossClueCells count]);
-    NSLog(@"Found %lu across clues", (unsigned long)[downClueCells count]);
+    NSLog(@"Found %lu down clues", (unsigned long)[downClueCells count]);
 
     self.acrossCells = acrossClueCells;
     self.downCells = downClueCells;
@@ -195,9 +195,14 @@
     self.currentCellGroup = self.currDirection == AnswerDirectionAcross ? acrossClueCells : downClueCells;
     NSArray *oppositeClueCells = self.currDirection == AnswerDirectionAcross ? downClueCells : acrossClueCells;
     
+    // COLORS
+    NSColor *currentCellColor = [[NSColor controlAccentColor] colorWithAlphaComponent:0.8];
+    NSColor *currentClueColor = [[NSColor controlAccentColor] colorWithAlphaComponent:0.5];
+    
+    
     // set background color of clue
     for (GridCellView *cellView in self.currentCellGroup) {
-        [cellView.layer setBackgroundColor:[[NSColor systemBlueColor] CGColor]];
+        [cellView.layer setBackgroundColor:[currentClueColor CGColor]];
     }
     
     // set background color of opposite drirection
@@ -206,7 +211,7 @@
     }
     
     // set backgorund color of clicked cell
-    [cell.layer setBackgroundColor:[[NSColor blueColor] CGColor]];
+    [cell.layer setBackgroundColor:[currentCellColor CGColor]];
     
     // select clues in sidebar
     GridCellView *acrossFirstCell = acrossClueCells[0];
