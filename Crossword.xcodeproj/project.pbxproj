@@ -20,6 +20,7 @@
 		2E32AEA421E271C600090646 /* GridCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AEA321E271C600090646 /* GridCellView.m */; };
 		2E32AEA821E91EA000090646 /* HintTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AEA721E91EA000090646 /* HintTableView.m */; };
 		2E32AEAB21EBA8AF00090646 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2E32AEAA21EBA8AF00090646 /* LICENSE */; };
+		2E4026C7222B10C200B72D2C /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E4026C6222B10C200B72D2C /* WindowController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		2E32AEA721E91EA000090646 /* HintTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HintTableView.m; sourceTree = "<group>"; };
 		2E32AEA921EBA6EB00090646 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		2E32AEAA21EBA8AF00090646 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2E4026C5222B10C200B72D2C /* WindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
+		2E4026C6222B10C200B72D2C /* WindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,9 +134,11 @@
 				2E00057021D30526006F12E8 /* Main.storyboard */,
 				2E00057321D30526006F12E8 /* Info.plist */,
 				2E00057421D30526006F12E8 /* main.m */,
-				2E00057621D30526006F12E8 /* Crossword.entitlements */,
 				2E00059821D3EA1F006F12E8 /* Crossword.h */,
 				2E00059921D3EA1F006F12E8 /* Crossword.m */,
+				2E4026C5222B10C200B72D2C /* WindowController.h */,
+				2E4026C6222B10C200B72D2C /* WindowController.m */,
+				2E00057621D30526006F12E8 /* Crossword.entitlements */,
 			);
 			path = Crossword;
 			sourceTree = "<group>";
@@ -303,6 +308,7 @@
 				2E00056D21D30525006F12E8 /* Document.m in Sources */,
 				2E00056A21D30525006F12E8 /* ViewController.m in Sources */,
 				2E00057521D30526006F12E8 /* main.m in Sources */,
+				2E4026C7222B10C200B72D2C /* WindowController.m in Sources */,
 				2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */,
 				2E00056721D30525006F12E8 /* AppDelegate.m in Sources */,
 				2E32AEA421E271C600090646 /* GridCellView.m in Sources */,

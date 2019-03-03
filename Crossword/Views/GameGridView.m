@@ -287,8 +287,7 @@
 - (void) selectNextSquare {
     NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
     if (currIndex + 1 >= self.currentCellGroup.count) {
-        [self selectNextClue];
-        return;
+        return [self selectNextClue];
     }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex + 1]];
 }
@@ -297,8 +296,7 @@
 - (void) selectPreviousSquare {
     NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
     if (currIndex - 1 == -1) {
-        NSLog(@"Can't move, should go to prev answer space here");
-        return;
+        return [self selectPreviousClue];
     }
     [self selectClueForCell:[self.currentCellGroup objectAtIndex:currIndex - 1]];
 }
@@ -311,12 +309,25 @@
     } else {
         NSUInteger i = [self.downCells indexOfObject:self.currentCellGroup];
         if (i + 1 >= self.downCells.count) return; // at last clue, TODO: switch directions
-        self.currentCellGroup = [self.acrossCells objectAtIndex:i + 1];
+        self.currentCellGroup = [self.downCells objectAtIndex:i + 1];
     }
     [self selectClueForCell:self.currentCellGroup[0]];
 }
 
-// TODO: down
+- (void) selectPreviousClue {
+    if (self.currDirection == AnswerDirectionAcross) {
+        NSUInteger i = [self.acrossCells indexOfObject:self.currentCellGroup];
+        if (i - 1 < 0) return; // at first clue, TODO: Switch directions
+        self.currentCellGroup = [self.acrossCells objectAtIndex:i - 1];
+    } else {
+        NSUInteger i = [self.downCells indexOfObject:self.currentCellGroup];
+        if (i - 1 < 0) return; // at first clue, TODO: switch directions
+        self.currentCellGroup = [self.downCells objectAtIndex:i - 1];
+    }
+    [self selectClueForCell:self.currentCellGroup[0]];
+}
+
+
 - (void) selectClue:(NSString *)num withDirection:(AnswerDirection)dir {
     NSArray *searchCells = dir == AnswerDirectionAcross ? self.acrossCells : self.downCells;
     for (NSArray *cellGroup in searchCells) {
@@ -325,5 +336,27 @@
             [self selectClueForCell:cell];
         }
     }
+}
+
+// TODO: IMPLEMENT FOR ALL
+- (BOOL) checkSquare {
+    // this is extremely ugly, probably override drawWithFrame for GridCellView
+    // with something prettier, eventually
+    [NSException raise:@"UnimplementedMethod"
+                format:@"%@ is unimplemented", NSStringFromSelector(_cmd)];
+    self.currentCell.layer.borderColor = [[NSColor systemRedColor] CGColor];
+    self.currentCell.layer.borderWidth = 1;
+    return false;
+}
+
+// TODO: IMPLEMENT FOR ALL
+- (BOOL) revealSquare {
+    // this is extremely ugly, probably override drawWithFrame for GridCellView
+    // with something prettier, eventually
+    [NSException raise:@"UnimplementedMethod"
+                format:@"%@ is unimplemented", NSStringFromSelector(_cmd)];
+    self.currentCell.layer.borderColor = [[NSColor systemBlueColor] CGColor];
+    self.currentCell.layer.borderWidth = 1;
+    return false;
 }
 @end

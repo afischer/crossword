@@ -26,8 +26,17 @@ typedef enum {
 @property (strong, nonatomic) NSArray *acrossCells;
 @property (strong, nonatomic) NSArray *downCells;
 - (void) setupWithCrossword:(Crossword *)crossword;
+
+// selection
 - (void) selectClue:(NSString *)num withDirection:(AnswerDirection)dir;
+- (void) selectPreviousClue;
+- (void) selectNextClue;
+- (void) rotateSelection;
 - (void) clearSelection;
+
+// checking
+- (BOOL) checkSquare;
+- (BOOL) revealSquare;
 @end
 
 NS_ASSUME_NONNULL_END

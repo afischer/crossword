@@ -28,6 +28,10 @@ Lots still to do.
 - [ ] Threading??
 ... more
 
+## Known issues
+- [ ] Down answer blocks are sorted incorrectly (column major, bad)
+- [ ] saving is broken
+
 *ignore me*
 
 https://www.nytimes.com/svc/crosswords/v3/puzzles.json

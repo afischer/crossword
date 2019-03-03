@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "WindowController.h"
 #import "Document.h"
 #import "Crossword.h"
 
@@ -26,7 +27,6 @@
     if (!puzzleDoc.crossword) return; // no valid crossword
     
     self.crossword = puzzleDoc.crossword;
-    self.view.window.title = self.crossword.name;
     
     // set text labels
     [self.titleText setStringValue:self.crossword.name];
@@ -47,5 +47,9 @@
     [self.gameTable sizeToFit];
     // FIXME: for asymetric puzzles, this will break if the puzzle is taller than wide
     self.gameTable.rowHeight = self.gameTable.tableColumns[0].width;
+    
+    self.view.window.title = self.crossword.name;
+    WindowController *wc = self.view.window.windowController;
+    wc.puzzleTitle.stringValue = self.crossword.name;
 }
 @end
