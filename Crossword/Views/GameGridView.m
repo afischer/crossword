@@ -231,9 +231,11 @@
             return [self selectNextClue];
         case 51: // backspace
             self.currentCellView.textField.stringValue = @"";
+            [self currentCell].currentValue = @"";
             return [self selectPreviousSquare];
         default:
             self.currentCellView.textField.stringValue = [[event characters] uppercaseString];
+            [self currentCell].currentValue = [[event characters] uppercaseString];
             return [self selectNextSquare];
     }
 }
@@ -336,21 +338,59 @@
 }
 
 // TODO: IMPLEMENT FOR ALL
-- (BOOL) checkSquare {
-    // this is extremely ugly, probably override drawWithFrame for GridCellView
-    // with something prettier, eventually
-    [NSException raise:@"UnimplementedMethod"
-                format:@"%@ is unimplemented", NSStringFromSelector(_cmd)];
-    return false;
+- (void) checkCellInView:(GridCellView *)cellView {
+    GridCell *cell = cellView.cell;
+    NSLog(@"%@ == %@", cell.correctValue, cell.currentValue);
+    if (![cell.correctValue isEqualToString:cell.currentValue]) {
+        cell.isIncorrect = YES;
+        [cellView.textField setTextColor:[NSColor systemRedColor]];
+    } else if (!cell.isRevealed) {
+        [cellView.textField setTextColor:[NSColor textColor]];
+    }
 }
 
+- (void) checkSquare {
+    [self checkCellInView:self.currentCellView];
+}
+
+- (void) checkClue {
+    for (GridCellView *cellView in [self currentCellGroup]) {
+        [self checkCellInView:cellView];
+    }
+}
+
+- (void) checkPuzzle {
+    for (NSArray *clueCells in self.acrossCells) {
+        for (GridCellView *cellView in clueCells) {
+            [self checkCellInView:cellView];
+        }
+    }
+}
 // TODO: IMPLEMENT FOR ALL
-- (BOOL) revealSquare {
-    // this is extremely ugly, probably override drawWithFrame for GridCellView
-    // with something prettier, eventually
-    self.currentCellView.cell.isRevealed = YES;
-    [self.currentCellView.textField setTextColor:[NSColor systemBlueColor]];
-    self.currentCellView.textField.stringValue = [self currentCell].correctValue;
-    return false;
+
+- (void) revealCellInView:(GridCellView *)cellView {
+    GridCell *cell = cellView.cell;
+    cell.isRevealed = YES;
+    [cellView.textField setTextColor:[NSColor systemBlueColor]];
+    cellView.textField.stringValue = cell.correctValue;
+    cell.currentValue = cell.correctValue;
+}
+
+- (void) revealSquare {
+    [self revealCellInView:self.currentCellView];
+}
+
+- (void) revealClue {
+    for (GridCellView *cellView in [self currentCellGroup]) {
+        [self revealCellInView:cellView];
+    }
+}
+
+- (void) revealPuzzle {
+    for (NSArray *clueCells in self.acrossCells) {
+        for (GridCellView *cellView in clueCells) {
+            [self revealCellInView:cellView];
+        }
+    }
 }
 @end

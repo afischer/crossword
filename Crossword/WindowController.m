@@ -42,12 +42,12 @@
 
 - (IBAction)didCheckClue:(id)sender {
     NSLog(@"Checking Clue");
-    [self.vc.gameTable checkSquare];
+    [self.vc.gameTable checkClue];
 }
 
 - (IBAction)didCheckPuzzle:(id)sender {
     NSLog(@"Checking Puzzle");
-    [self.vc.gameTable checkSquare];
+    [self.vc.gameTable checkPuzzle];
 }
 
 - (IBAction)didRevealSquare:(id)sender {
@@ -57,12 +57,12 @@
 
 - (IBAction)didRevealClue:(id)sender {
     NSLog(@"Revealing Clue");
-    [self.vc.gameTable revealSquare];
+    [self.vc.gameTable revealClue];
 }
 
 - (IBAction)didRevealPuzzle:(id)sender {
     NSLog(@"Revealing Puzzle");
-    [self.vc.gameTable revealSquare];
+    [self.vc.gameTable revealPuzzle];
 }
 
 @end

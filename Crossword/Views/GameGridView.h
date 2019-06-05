@@ -35,8 +35,12 @@ typedef enum {
 - (void) clearSelection;
 
 // checking
-- (BOOL) checkSquare;
-- (BOOL) revealSquare;
+- (void) checkSquare;
+- (void) checkClue;
+- (void) checkPuzzle;
+- (void) revealSquare;
+- (void) revealClue;
+- (void) revealPuzzle;
 @end
 
 NS_ASSUME_NONNULL_END
