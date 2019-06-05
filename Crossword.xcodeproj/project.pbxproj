@@ -21,6 +21,7 @@
 		2E32AEA821E91EA000090646 /* HintTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E32AEA721E91EA000090646 /* HintTableView.m */; };
 		2E32AEAB21EBA8AF00090646 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2E32AEAA21EBA8AF00090646 /* LICENSE */; };
 		2E4026C7222B10C200B72D2C /* WindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E4026C6222B10C200B72D2C /* WindowController.m */; };
+		2EFE0F2622A7F71B009E0012 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EFE0F2522A7F71B009E0012 /* GridCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		2E32AEAA21EBA8AF00090646 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2E4026C5222B10C200B72D2C /* WindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WindowController.h; sourceTree = "<group>"; };
 		2E4026C6222B10C200B72D2C /* WindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WindowController.m; sourceTree = "<group>"; };
+		2EFE0F2422A7F71B009E0012 /* GridCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
+		2EFE0F2522A7F71B009E0012 /* GridCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +126,7 @@
 		2E00056421D30525006F12E8 /* Crossword */ = {
 			isa = PBXGroup;
 			children = (
+				2EFE0F2322A7F6FD009E0012 /* Models */,
 				2E32AEA521E91C1A00090646 /* Views */,
 				2E00056521D30525006F12E8 /* AppDelegate.h */,
 				2E00056621D30525006F12E8 /* AppDelegate.m */,
@@ -134,8 +138,6 @@
 				2E00057021D30526006F12E8 /* Main.storyboard */,
 				2E00057321D30526006F12E8 /* Info.plist */,
 				2E00057421D30526006F12E8 /* main.m */,
-				2E00059821D3EA1F006F12E8 /* Crossword.h */,
-				2E00059921D3EA1F006F12E8 /* Crossword.m */,
 				2E4026C5222B10C200B72D2C /* WindowController.h */,
 				2E4026C6222B10C200B72D2C /* WindowController.m */,
 				2E00057621D30526006F12E8 /* Crossword.entitlements */,
@@ -172,6 +174,17 @@
 				2E32AEA721E91EA000090646 /* HintTableView.m */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2EFE0F2322A7F6FD009E0012 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2E00059821D3EA1F006F12E8 /* Crossword.h */,
+				2E00059921D3EA1F006F12E8 /* Crossword.m */,
+				2EFE0F2422A7F71B009E0012 /* GridCell.h */,
+				2EFE0F2522A7F71B009E0012 /* GridCell.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,6 +320,7 @@
 				2E32AEA821E91EA000090646 /* HintTableView.m in Sources */,
 				2E00056D21D30525006F12E8 /* Document.m in Sources */,
 				2E00056A21D30525006F12E8 /* ViewController.m in Sources */,
+				2EFE0F2622A7F71B009E0012 /* GridCell.m in Sources */,
 				2E00057521D30526006F12E8 /* main.m in Sources */,
 				2E4026C7222B10C200B72D2C /* WindowController.m in Sources */,
 				2E00059A21D3EA1F006F12E8 /* Crossword.m in Sources */,

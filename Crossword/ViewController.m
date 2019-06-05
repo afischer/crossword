@@ -29,7 +29,6 @@
     self.crossword = puzzleDoc.crossword;
     
     // set text labels
-    [self.titleText setStringValue:self.crossword.name];
     [self.authorText setStringValue:self.crossword.author];
     [self.copyrightText setStringValue:self.crossword.copyright];
 

@@ -8,6 +8,7 @@
 
 #import "GameGridView.h"
 #import "ViewController.h"
+#import "GridCell.h"
 
 @implementation GameGridView
 
@@ -95,31 +96,23 @@
 - (NSView *)tableView:(NSTableView *)tableView
    viewForTableColumn:(NSTableColumn *)tableColumn
                   row:(NSInteger)row {
-    GridCellView *cell = [tableView makeViewWithIdentifier:@"GridCell" owner:nil];
-    cell.wantsLayer = YES;
-
+    
+    GridCellView *cellView = [tableView makeViewWithIdentifier:@"GridCell" owner:nil];
+    
     NSUInteger col = [[self tableColumns] indexOfObject:tableColumn];
-    if ([self.crossword isBlackAtX:(int)col Y:(int)row]) {
-        // Set Color
-        cell.layer.backgroundColor = [[NSColor blackColor] CGColor];
-        [cell.hintLabel setHidden:YES];
-        [cell.textField setHidden:YES];
-
-    } else {
-        // Set Hint
-        // TODO: MAKE GET CLUE METHOD
-        if ([self.crossword hasLabelAtX:(int)col Y:(int)row]) {
-            NSString *coordString = [NSString stringWithFormat:@"%d,%d", (int)col, (int)row];
-            NSString *clueNum = [self.crossword.labelMap valueForKey:coordString];
-            [cell.hintLabel setStringValue:clueNum];
-        } else {
-            [cell.hintLabel setHidden:YES];
-        }
-        
-        // Set text
-        [cell.textField setStringValue:@" "];
-    }
-    return cell;
+    
+    NSString *cellVal = [self.crossword valueAtX:(int)col Y:(int)row];
+    NSString *cellSol = [self.crossword solutionAtX:(int)col Y:(int)row];
+    NSString *cellLabel = [self.crossword labelAtX:(int)col Y:(int)row];
+    BOOL cellIsBlack = [self.crossword isBlackAtX:col Y:row];
+    
+    GridCell *cell = [[GridCell alloc] initWithCurrentVal:cellVal
+                                                 solution:cellSol
+                                                    label:cellLabel
+                                                  isBlack:cellIsBlack];
+    
+    [cellView setupCell:cell];
+    return cellView;
 }
 
 
@@ -166,11 +159,11 @@
     
     [self clearSelection]; // Clear board colors
     
-    if ([cell isEqual:self.currentCell]) {
+    if ([cell isEqual:self.currentCellView]) {
         self.currDirection = self.currDirection ? AnswerDirectionAcross : AnswerDirectionDown;
     }
     
-    self.currentCell = cell;
+    self.currentCellView = cell;
     
     // find group of cells with same clue
     NSArray *acrossClueCells = nil;
@@ -237,10 +230,10 @@
         case 48: // tab
             return [self selectNextClue];
         case 51: // backspace
-            self.currentCell.textField.stringValue = @"";
+            self.currentCellView.textField.stringValue = @"";
             return [self selectPreviousSquare];
         default:
-            self.currentCell.textField.stringValue = [[event characters] uppercaseString];
+            self.currentCellView.textField.stringValue = [[event characters] uppercaseString];
             return [self selectNextSquare];
     }
 }
@@ -279,13 +272,13 @@
 }
 
 - (void) rotateSelection {
-    [self selectClueForCell:self.currentCell];
+    [self selectClueForCell:self.currentCellView];
 }
 
 
 // TODO: CHECK OOB CONDITIONS
 - (void) selectNextSquare {
-    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCellView];
     if (currIndex + 1 >= self.currentCellGroup.count) {
         return [self selectNextClue];
     }
@@ -294,7 +287,7 @@
 
 // TODO: CHECK OOB CONDITIONS
 - (void) selectPreviousSquare {
-    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCell];
+    NSUInteger currIndex = [self.currentCellGroup indexOfObject:self.currentCellView];
     if (currIndex - 1 == -1) {
         return [self selectPreviousClue];
     }
@@ -338,14 +331,16 @@
     }
 }
 
+- (GridCell *) currentCell {
+    return self.currentCellView.cell;
+}
+
 // TODO: IMPLEMENT FOR ALL
 - (BOOL) checkSquare {
     // this is extremely ugly, probably override drawWithFrame for GridCellView
     // with something prettier, eventually
     [NSException raise:@"UnimplementedMethod"
                 format:@"%@ is unimplemented", NSStringFromSelector(_cmd)];
-    self.currentCell.layer.borderColor = [[NSColor systemRedColor] CGColor];
-    self.currentCell.layer.borderWidth = 1;
     return false;
 }
 
@@ -353,10 +348,9 @@
 - (BOOL) revealSquare {
     // this is extremely ugly, probably override drawWithFrame for GridCellView
     // with something prettier, eventually
-    [NSException raise:@"UnimplementedMethod"
-                format:@"%@ is unimplemented", NSStringFromSelector(_cmd)];
-    self.currentCell.layer.borderColor = [[NSColor systemBlueColor] CGColor];
-    self.currentCell.layer.borderWidth = 1;
+    self.currentCellView.cell.isRevealed = YES;
+    [self.currentCellView.textField setTextColor:[NSColor systemBlueColor]];
+    self.currentCellView.textField.stringValue = [self currentCell].correctValue;
     return false;
 }
 @end

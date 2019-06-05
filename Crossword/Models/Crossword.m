@@ -43,11 +43,15 @@
         
 
         NSMutableArray *board = [[NSMutableArray alloc] init];
+        NSMutableArray *correctBoard = [[NSMutableArray alloc] init];
+
         for (int i = 0; i < self.width; i++) {
             NSRange rowRange = NSMakeRange(self.width * i, self.width);
             [board addObject:[boardString substringWithRange:rowRange]];
+            [correctBoard addObject:[solutionString substringWithRange:rowRange]];
         }
         self.boardLayout = [board copy];
+        self.solvedLayout = [correctBoard copy];
         
         NSLog(@"%@", board);
         
@@ -134,6 +138,19 @@
     return [self.boardLayout[y] characterAtIndex:x] == 46;
 }
 
+-(NSString *) valueAtX:(int) x Y:(int) y {
+    if ([self isBlackAtX:x Y:y]) return @"";
+    char character = [self.boardLayout[y] characterAtIndex:x];
+    if (character == 45) return @"";
+    return [NSString stringWithFormat:@"%c", character];
+}
+
+-(NSString *) solutionAtX:(int) x Y:(int) y {
+    if ([self isBlackAtX:x Y:y]) return @"";
+    char character = [self.solvedLayout[y] characterAtIndex:x];
+    return [NSString stringWithFormat:@"%c", character];
+}
+
 -(BOOL) hasAcrossAtX:(int) x Y:(int) y {
     if (x == 0 || [self isBlackAtX:x - 1 Y:y]) {
         return x + 1 < self.width && ![self isBlackAtX:x + 1 Y:y];
@@ -151,4 +168,14 @@
 -(BOOL) hasLabelAtX:(int) x Y:(int) y {
     return [self hasDownAtX:(int)x Y:(int)y] || [self hasAcrossAtX:(int)x Y:(int)y];
 }
+
+-(NSString *) labelAtX:(int) x Y:(int) y {
+    if ([self hasDownAtX:(int)x Y:(int)y] || [self hasAcrossAtX:(int)x Y:(int)y]) {
+        NSString *coordString = [NSString stringWithFormat:@"%d,%d", (int)x, (int)y];
+        NSString *clueNum = [self.labelMap valueForKey:coordString];
+        return clueNum;
+    }
+    return @"";
+}
+
 @end

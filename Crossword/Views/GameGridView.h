@@ -21,7 +21,7 @@ typedef enum {
 
 @property (strong, nonatomic) Crossword *crossword;
 @property (nonatomic) AnswerDirection currDirection;
-@property (strong, nonatomic) GridCellView *currentCell;
+@property (strong, nonatomic) GridCellView *currentCellView;
 @property (strong, nonatomic) NSArray *currentCellGroup;
 @property (strong, nonatomic) NSArray *acrossCells;
 @property (strong, nonatomic) NSArray *downCells;
